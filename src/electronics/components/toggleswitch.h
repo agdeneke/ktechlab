@@ -109,4 +109,26 @@ private:
     bool pressed;
 };
 
+/**
+@short Multi-Pole Multi-Throw Switch
+@author Abiel Deneke
+*/
+class ECMPMT : public Component
+{
+public:
+    ECMPMT(ICNDocument *icnDocument, bool newItem, const char *id = nullptr);
+    ~ECMPMT() override;
+
+    static Item *construct(ItemDocument *itemDocument, bool newItem, const char *id);
+    static LibraryItem *libraryItem();
+
+    void buttonStateChanged(const QString &id, bool state) override;
+    void dataChanged() override;
+
+private:
+    void drawShape(QPainter &p) override;
+    Switch *m_switch;
+    bool pressed;
+};
+
 #endif

@@ -357,3 +357,81 @@ void ECSPST::buttonStateChanged(const QString &, bool state)
     m_switch->setState(state ? Switch::Closed : Switch::Open);
 }
 // END class ECSPST
+
+// BEGIN class ECMPMT
+Item *ECMPMT::construct(ItemDocument *itemDocument, bool newItem, const char *id)
+{
+    return new ECMPMT((ICNDocument *)itemDocument, newItem, id);
+}
+
+LibraryItem *ECMPMT::libraryItem()
+{
+    return new LibraryItem(QStringList(QString("ec/mpmt_toggle")), i18n("MPMT"), i18n("Switches"), "spst.png", LibraryItem::lit_component, ECMPMT::construct);
+}
+
+ECMPMT::ECMPMT(ICNDocument *icnDocument, bool newItem, const char *id)
+    : Component(icnDocument, newItem, id ? id : "mpmt_toggle")
+{
+    m_name = i18n("MPMT Toggle");
+    setSize(-16, -8, 32, 16);
+    pressed = false;
+
+    addButton("button", QRect(-16, 8, width(), 20), "", true);
+
+    createProperty("button_text", Variant::Type::String);
+    property("button_text")->setCaption(i18n("Button Text"));
+
+    Variant *v = createProperty("bounce", Variant::Type::Bool);
+    v->setCaption("Bounce");
+    v->setAdvanced(true);
+    v->setValue(false);
+
+    v = createProperty("bounce_period", Variant::Type::Double);
+    v->setCaption("Bounce Period");
+    v->setAdvanced(true);
+    v->setUnit("s");
+    v->setValue(5e-3);
+
+    button("button")->setState(pressed);
+
+    init1PinLeft();
+    init1PinRight();
+
+    m_switch = createSwitch(m_pNNode[0], m_pPNode[0], !pressed);
+}
+
+ECMPMT::~ECMPMT()
+{
+}
+
+void ECMPMT::dataChanged()
+{
+    button("button")->setText(dataString("button_text"));
+
+    bool bounce = dataBool("bounce");
+    int bouncePeriod_ms = int(dataDouble("bounce_period") * 1e3);
+    m_switch->setBounce(bounce, bouncePeriod_ms);
+}
+
+void ECMPMT::drawShape(QPainter &p)
+{
+    initPainter(p);
+
+    int _x = (int)x() - 16;
+    int _y = (int)y() - 8;
+    const int radius = 2;
+
+    p.drawEllipse(_x, _y + 7, 2 * radius, 2 * radius);
+    p.drawEllipse(_x + width() - 2 * radius + 1, _y + 7, 2 * radius, 2 * radius);
+    const int dy = pressed ? 0 : -6;
+    p.drawLine(_x + 2 * radius, _y + 8, _x + width() - 2 * radius, _y + 8 + dy);
+
+    deinitPainter(p);
+}
+
+void ECMPMT::buttonStateChanged(const QString &, bool state)
+{
+    pressed = state;
+    m_switch->setState(state ? Switch::Closed : Switch::Open);
+}
+// END class ECMPMT
