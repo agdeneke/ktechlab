@@ -392,6 +392,10 @@ ECMPMT::ECMPMT(ICNDocument *icnDocument, bool newItem, const char *id)
     v->setUnit("s");
     v->setValue(5e-3);
 
+    v = createProperty("num_of_poles", Variant::Type::Int);
+    v->setCaption(i18n("Number of Poles"));
+    v->setValue(1);
+
     button("button")->setState(pressed);
 
     init1PinLeft();
