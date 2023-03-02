@@ -424,15 +424,18 @@ void ECTPST::drawShape(QPainter &p)
     int _y = (int)y() - 16;
     const int radius = 2;
 
-    p.drawEllipse(_x, _y + 6, 2 * radius, 2 * radius);
-    p.drawEllipse(_x, _y + 22, 2 * radius, 2 * radius);
-    p.drawEllipse(_x + width() - 2 * radius + 1, _y + 6, 2 * radius, 2 * radius);
-    p.drawEllipse(_x + width() - 2 * radius + 1, _y + 22, 2 * radius, 2 * radius);
+    p.drawEllipse(_x, _y - 2, 2 * radius, 2 * radius);
+    p.drawEllipse(_x, _y + 14, 2 * radius, 2 * radius);
+    p.drawEllipse(_x, _y + 30, 2 * radius, 2 * radius);
+    p.drawEllipse(_x + width() - 2 * radius + 1, _y - 2, 2 * radius, 2 * radius);
+    p.drawEllipse(_x + width() - 2 * radius + 1, _y + 14, 2 * radius, 2 * radius);
+    p.drawEllipse(_x + width() - 2 * radius + 1, _y + 30, 2 * radius, 2 * radius);
 
     const int dy = pressed ? 6 : 0;
 
-    p.drawLine(_x + 2 * radius, _y + 7, _x + width() - 2 * radius, _y + 1 + dy);
-    p.drawLine(_x + 2 * radius, _y + 24, _x + width() - 2 * radius, _y + 18 + dy);
+    p.drawLine(_x + 2 * radius, _y - 1, _x + width() - 2 * radius, _y - 7 + dy);
+    p.drawLine(_x + 2 * radius, _y + 16, _x + width() - 2 * radius, _y + 10 + dy);
+    p.drawLine(_x + 2 * radius, _y + 33, _x + width() - 2 * radius, _y + 27 + dy);
 
     deinitPainter(p);
 }
