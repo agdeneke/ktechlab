@@ -245,7 +245,7 @@ void ItemLibrary::addComponents()
 
     // Switches
     addLibraryItem(ECRotoSwitch::libraryItem());
-    addLibraryItem(ECMPMT::libraryItem());
+    addLibraryItem(ECTPST::libraryItem());
     addLibraryItem(ECDPDT::libraryItem());
     addLibraryItem(ECSPDT::libraryItem());
     addLibraryItem(ECDPST::libraryItem());

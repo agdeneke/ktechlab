@@ -110,14 +110,14 @@ private:
 };
 
 /**
-@short Multi-Pole Multi-Throw Switch
+@short Triple-Pole Single-Throw Switch
 @author Abiel Deneke
 */
-class ECMPMT : public Component
+class ECTPST : public Component
 {
 public:
-    ECMPMT(ICNDocument *icnDocument, bool newItem, const char *id = nullptr);
-    ~ECMPMT() override;
+    ECTPST(ICNDocument *icnDocument, bool newItem, const char *id = nullptr);
+    ~ECTPST() override;
 
     static Item *construct(ItemDocument *itemDocument, bool newItem, const char *id);
     static LibraryItem *libraryItem();
@@ -127,7 +127,10 @@ public:
 
 private:
     void drawShape(QPainter &p) override;
-    Switch *m_switch;
+
+    Switch *m_switch1;
+    Switch *m_switch2;
+    Switch *m_switch3;
     bool pressed;
 };
 

@@ -358,25 +358,24 @@ void ECSPST::buttonStateChanged(const QString &, bool state)
 }
 // END class ECSPST
 
-// BEGIN class ECMPMT
-Item *ECMPMT::construct(ItemDocument *itemDocument, bool newItem, const char *id)
+// BEGIN class ECTPST
+Item *ECTPST::construct(ItemDocument *itemDocument, bool newItem, const char *id)
 {
-    return new ECMPMT((ICNDocument *)itemDocument, newItem, id);
+    return new ECTPST((ICNDocument *)itemDocument, newItem, id);
 }
 
-LibraryItem *ECMPMT::libraryItem()
+LibraryItem *ECTPST::libraryItem()
 {
-    return new LibraryItem(QStringList(QString("ec/mpmt_toggle")), i18n("MPMT"), i18n("Switches"), "spst.png", LibraryItem::lit_component, ECMPMT::construct);
+    return new LibraryItem(QStringList(QString("ec/tpst_toggle")), i18n("TPST"), i18n("Switches"), "dpst.png", LibraryItem::lit_component, ECTPST::construct);
 }
 
-ECMPMT::ECMPMT(ICNDocument *icnDocument, bool newItem, const char *id)
-    : Component(icnDocument, newItem, id ? id : "mpmt_toggle")
+ECTPST::ECTPST(ICNDocument *icnDocument, bool newItem, const char *id)
+    : Component(icnDocument, newItem, id ? id : "tpst_toggle")
 {
-    m_name = i18n("MPMT Toggle");
-    setSize(-16, -8, 32, 16);
-    pressed = false;
+    m_name = i18n("TPST Toggle");
+    setSize(-16, -16, 32, 32);
 
-    addButton("button", QRect(-16, 8, width(), 20), "", true);
+    addButton("button", QRect(-16, 24, 32, 20), "", true);
 
     createProperty("button_text", Variant::Type::String);
     property("button_text")->setCaption(i18n("Button Text"));
@@ -392,50 +391,57 @@ ECMPMT::ECMPMT(ICNDocument *icnDocument, bool newItem, const char *id)
     v->setUnit("s");
     v->setValue(5e-3);
 
-    v = createProperty("num_of_poles", Variant::Type::Int);
-    v->setCaption(i18n("Number of Poles"));
-    v->setValue(1);
+    init3PinLeft(-16, 0, 16);
+    init3PinRight(-16, 0, 16);
 
-    button("button")->setState(pressed);
-
-    init1PinLeft();
-    init1PinRight();
-
-    m_switch = createSwitch(m_pNNode[0], m_pPNode[0], !pressed);
+    m_switch1 = createSwitch(m_pPNode[0], m_pNNode[0], true);
+    m_switch2 = createSwitch(m_pPNode[1], m_pNNode[1], true);
+    m_switch3 = createSwitch(m_pPNode[2], m_pNNode[2], true);
+    pressed = false;
 }
 
-ECMPMT::~ECMPMT()
+ECTPST::~ECTPST()
 {
 }
 
-void ECMPMT::dataChanged()
+void ECTPST::dataChanged()
 {
     button("button")->setText(dataString("button_text"));
 
     bool bounce = dataBool("bounce");
     int bouncePeriod_ms = int(dataDouble("bounce_period") * 1e3);
-    m_switch->setBounce(bounce, bouncePeriod_ms);
+    
+    m_switch1->setBounce(bounce, bouncePeriod_ms);
+    m_switch2->setBounce(bounce, bouncePeriod_ms);
+    m_switch3->setBounce(bounce, bouncePeriod_ms);
 }
 
-void ECMPMT::drawShape(QPainter &p)
+void ECTPST::drawShape(QPainter &p)
 {
     initPainter(p);
 
     int _x = (int)x() - 16;
-    int _y = (int)y() - 8;
+    int _y = (int)y() - 16;
     const int radius = 2;
 
-    p.drawEllipse(_x, _y + 7, 2 * radius, 2 * radius);
-    p.drawEllipse(_x + width() - 2 * radius + 1, _y + 7, 2 * radius, 2 * radius);
-    const int dy = pressed ? 0 : -6;
-    p.drawLine(_x + 2 * radius, _y + 8, _x + width() - 2 * radius, _y + 8 + dy);
+    p.drawEllipse(_x, _y + 6, 2 * radius, 2 * radius);
+    p.drawEllipse(_x, _y + 22, 2 * radius, 2 * radius);
+    p.drawEllipse(_x + width() - 2 * radius + 1, _y + 6, 2 * radius, 2 * radius);
+    p.drawEllipse(_x + width() - 2 * radius + 1, _y + 22, 2 * radius, 2 * radius);
+
+    const int dy = pressed ? 6 : 0;
+
+    p.drawLine(_x + 2 * radius, _y + 7, _x + width() - 2 * radius, _y + 1 + dy);
+    p.drawLine(_x + 2 * radius, _y + 24, _x + width() - 2 * radius, _y + 18 + dy);
 
     deinitPainter(p);
 }
 
-void ECMPMT::buttonStateChanged(const QString &, bool state)
+void ECTPST::buttonStateChanged(const QString &, bool state)
 {
+    m_switch1->setState(state ? Switch::Closed : Switch::Open);
+    m_switch2->setState(state ? Switch::Closed : Switch::Open);
+    m_switch3->setState(state ? Switch::Closed : Switch::Open);
     pressed = state;
-    m_switch->setState(state ? Switch::Closed : Switch::Open);
 }
-// END class ECMPMT
+// END class ECTPST
