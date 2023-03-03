@@ -22,12 +22,13 @@ ElementSignal::~ElementSignal()
 {
 }
 
-void ElementSignal::setStep(Type type, double frequency)
+void ElementSignal::setStep(Type type, double frequency, double phase)
 {
     m_type = type;
     m_frequency = frequency;
     m_omega = 2 * M_PI * m_frequency;
-    m_time = 1. / (4. * m_frequency);
+    // m_time = 1. / (4. * m_frequency);
+    m_phase = phase;
 }
 
 double ElementSignal::advance(double delta)
@@ -48,6 +49,6 @@ double ElementSignal::advance(double delta)
         return 0.;
     case ElementSignal::st_sinusoidal:
     default:
-        return sin(m_time * m_omega);
+        return sin(m_time * m_omega + m_phase);
     }
 }

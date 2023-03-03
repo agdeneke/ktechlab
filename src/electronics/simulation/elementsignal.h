@@ -22,7 +22,7 @@ public:
     ElementSignal();
     ~ElementSignal();
 
-    void setStep(Type type, double frequency);
+    void setStep(Type type, double frequency, double phase);
     /**
      * Advances the timer, returns amplitude (between -1 and 1)
      */
@@ -33,6 +33,7 @@ protected:
     double m_time;
     double m_frequency;
     double m_omega; // Used for sinusoidal signal
+    double m_phase;
 };
 
 #endif

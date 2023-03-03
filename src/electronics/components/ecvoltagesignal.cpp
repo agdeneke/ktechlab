@@ -43,7 +43,7 @@ ECVoltageSignal::ECVoltageSignal(ICNDocument *icnDocument, bool newItem, const c
 
     m_pNNode[0]->pin()->setGroundType(Pin::gt_medium);
     m_voltageSignal = createVoltageSignal(m_pNNode[0], m_pPNode[0], 0.);
-    m_voltageSignal->setStep(ElementSignal::st_sinusoidal, 50.);
+    m_voltageSignal->setStep(ElementSignal::st_sinusoidal, 50., 0);
 
     createProperty("frequency", Variant::Type::Double);
     property("frequency")->setCaption(i18n("Frequency"));
@@ -69,6 +69,13 @@ ECVoltageSignal::ECVoltageSignal(ICNDocument *icnDocument, bool newItem, const c
     allowed["RMS"] = i18n("RMS");
     property("peak-rms")->setAllowed(allowed);
     property("peak-rms")->setValue("Peak");
+
+    createProperty("phase-angle", Variant::Type::Double);
+    property("phase-angle")->setCaption(i18n("Phase Angle"));
+    property("phase-angle")->setUnit("rad");
+    property("phase-angle")->setMinValue(0);
+    property("phase-angle")->setMaxValue(2 * M_PI);
+    property("phase-angle")->setValue(0);
 }
 
 ECVoltageSignal::~ECVoltageSignal()
@@ -80,8 +87,9 @@ void ECVoltageSignal::dataChanged()
     const double voltage = dataDouble("voltage");
     const double frequency = dataDouble("frequency");
     bool rms = dataString("peak-rms") == "RMS";
+    const double phase = dataDouble("phase-angle");
 
-    m_voltageSignal->setStep(ElementSignal::st_sinusoidal, frequency);
+    m_voltageSignal->setStep(ElementSignal::st_sinusoidal, frequency, phase);
     if (rms) {
         QString display = QString::number(voltage / getMultiplier(voltage), 'g', 3) + getNumberMag(voltage) + "V RMS";
         setDisplayText("voltage", display);

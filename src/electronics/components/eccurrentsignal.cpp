@@ -39,7 +39,7 @@ ECCurrentSignal::ECCurrentSignal(ICNDocument *icnDocument, bool newItem, const c
 
     m_pNNode[0]->pin()->setGroundType(Pin::gt_low);
     m_currentSignal = createCurrentSignal(m_pNNode[0], m_pPNode[0], 0.);
-    m_currentSignal->setStep(ElementSignal::st_sinusoidal, 50.);
+    m_currentSignal->setStep(ElementSignal::st_sinusoidal, 50., 0);
 
     createProperty("1-frequency", Variant::Type::Double);
     property("1-frequency")->setCaption(i18n("Frequency"));
@@ -71,7 +71,7 @@ void ECCurrentSignal::dataChanged()
     QString display = QString::number(current / getMultiplier(current), 'g', 3) + getNumberMag(current) + "A";
     setDisplayText("current", display);
 
-    m_currentSignal->setStep(ElementSignal::st_sinusoidal, frequency);
+    m_currentSignal->setStep(ElementSignal::st_sinusoidal, frequency, 0);
     m_currentSignal->setCurrent(current);
 }
 
