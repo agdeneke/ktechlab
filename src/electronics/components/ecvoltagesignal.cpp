@@ -75,7 +75,7 @@ ECVoltageSignal::ECVoltageSignal(ICNDocument *icnDocument, bool newItem, const c
     property("phase-angle")->setUnit("deg");
     property("phase-angle")->setMinValue(0);
     property("phase-angle")->setMaxValue(360);
-    property("phase-angle")->setValue(0);
+    property("phase-angle")->setValue(90);
 }
 
 ECVoltageSignal::~ECVoltageSignal()
