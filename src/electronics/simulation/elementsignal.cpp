@@ -28,7 +28,7 @@ void ElementSignal::setStep(Type type, double frequency, double phase)
     m_frequency = frequency;
     m_omega = 2 * M_PI * m_frequency;
     // m_time = 1. / (4. * m_frequency);
-    m_phase = phase;
+    m_phase = phase * M_PI / 180;
 }
 
 double ElementSignal::advance(double delta)

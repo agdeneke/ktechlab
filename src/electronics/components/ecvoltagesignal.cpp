@@ -72,9 +72,9 @@ ECVoltageSignal::ECVoltageSignal(ICNDocument *icnDocument, bool newItem, const c
 
     createProperty("phase-angle", Variant::Type::Double);
     property("phase-angle")->setCaption(i18n("Phase Angle"));
-    property("phase-angle")->setUnit("rad");
+    property("phase-angle")->setUnit("deg");
     property("phase-angle")->setMinValue(0);
-    property("phase-angle")->setMaxValue(2 * M_PI);
+    property("phase-angle")->setMaxValue(360);
     property("phase-angle")->setValue(0);
 }
 
